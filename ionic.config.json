@@ -1,0 +1,7 @@
+{
+  "name": "brb-smart",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
