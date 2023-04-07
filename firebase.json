@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "brb-samrt",
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
