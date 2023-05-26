@@ -47,7 +47,7 @@ const Login: React.FC = () => {
                 type="text"
                 class="ion-outline"
                 name="username"
-                placeholder="Enter text"
+                placeholder="Enter Username"
               ></IonInput>
             </IonItem>
             <IonItem class="ion-margin">
@@ -55,7 +55,7 @@ const Login: React.FC = () => {
                 type="password"
                 name="password"
                 class="ion-outline"
-                placeholder="Enter text"
+                placeholder="Enter Password"
               ></IonInput>
             </IonItem>
             {/* <IonItem> */}

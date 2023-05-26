@@ -1,34 +1,47 @@
-import { IonItem, IonLabel, IonNote } from "@ionic/react";
-import { Message } from "../data/messages";
+import {
+  IonButton,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+} from "@ionic/react";
+import { IOrder } from "../data/messages";
 import "./OrderListItem.css";
+import { Link } from "react-router-dom";
 
 interface MessageListItemProps {
-  message: Message;
+  order: IOrder;
 }
 
-const OrderListItem: React.FC<MessageListItemProps> = ({ message }) => {
+const OrderListItem: React.FC<MessageListItemProps> = ({ order }) => {
+  const patingStatus = order.platingStatus ? "done" : "pending";
+  const kacchaMaalStatus = order.kacchaMaalStatus ? "done" : "pending";
   return (
-    <IonItem routerLink={`/message/${message.id}`} detail={false}>
-      <div slot="start" className="dot dot-unread"></div>
-      <IonLabel className="ion-text-wrap">
-        <h2>
-          {message.fromName}
-          <span className="date">
-            <IonNote>{message.date}</IonNote>
-          </span>
-        </h2>
-        <h3>{message.subject}</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      </IonLabel>
-    </IonItem>
+    <IonCard>
+      <IonCardHeader>
+        <IonCardTitle>Order No : {order.orderNumber} </IonCardTitle>
+        <IonCardSubtitle>
+          Order Date : <strong>{order.orderDate}</strong>
+        </IonCardSubtitle>
+        <IonCardSubtitle>Party Number : {order.partyCode}</IonCardSubtitle>
+        <IonCardSubtitle className={patingStatus}>
+          Plating Status : {`${order.platingStatus ? "Done" : "Pending"}`}
+        </IonCardSubtitle>
+        <IonCardSubtitle className={kacchaMaalStatus}>
+          Kaccha Maal Status :{" "}
+          {`${order.kacchaMaalStatus ? "Done" : "Pending"}`}
+        </IonCardSubtitle>
+      </IonCardHeader>
+
+      <Link to={{ pathname: `/edit/${order.orderNumber}`, state: { order } }}>
+        <IonButton fill="solid" color="primary">
+          Edit
+        </IonButton>
+      </Link>
+      <IonButton fill="solid" color="danger">
+        Delete
+      </IonButton>
+    </IonCard>
   );
 };
 

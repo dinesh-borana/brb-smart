@@ -57,3 +57,16 @@ ion-footer ion-title {
   font-size: 11px;
   font-weight: normal;
 }
+
+.done {
+  color: green;
+}
+.pending {
+  color: #fe7070;
+}
+ion-list a {
+  text-decoration: none;
+}
+ion-card-title {
+  font-size: 16px;
+}

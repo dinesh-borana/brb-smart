@@ -1,9 +1,14 @@
 import OrderListItem from "../components/OrderListItem";
-import { useEffect, useState } from "react";
-import { Message, getMessages } from "../data/messages";
+import { useRef, useState } from "react";
+
 import {
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
   IonList,
   IonPage,
   IonRefresher,
@@ -15,23 +20,40 @@ import {
 import "./Home.css";
 import { db } from "../firebase.config";
 import { collection, getDocs } from "firebase/firestore";
+import { add } from "ionicons/icons";
+import { LoaderSkeleton } from "./common/loaderSkeleton";
+import { Link } from "react-router-dom";
+
+const initialOrderItem = {
+  orderNumber: "",
+  kacchaMaalNotes: "",
+  orderList: [
+    {
+      designNo: "",
+      plating: "",
+      quantity: "",
+    }
+  ],
+  partyCode: "",
+  platingStatus: false,
+  platingNotes: "",
+  orderDate: "",
+  kacchaMaalStatus: false,
+};
 
 const Home: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const getOrdersList = async () => {
-    const orderListRef = await getDocs(collection(db, "user_roles"));
-    orderListRef.forEach((doc) => {
-      console.log(doc.id, doc.data());
+  const [ordersList, setOrdersList] = useState<any[]>([]);
+  const getOrdersList = () => {
+    getDocs(collection(db, "orders")).then((results) => {
+      results.forEach((result) => {
+        setOrdersList((ordersList) => [...ordersList, result.data()]);
+      });
     });
   };
 
-  useEffect(() => {
-    getOrdersList();
-  }, []);
-
   useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
+    setOrdersList([]);
+    getOrdersList();
   });
 
   const refresh = (e: CustomEvent) => {
@@ -44,14 +66,13 @@ const Home: React.FC = () => {
     <IonPage id="home-page">
       <IonHeader>
         <IonToolbar>
-          <IonTitle>BRB</IonTitle>
+          <IonTitle className="title">BRB Smart</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonRefresher slot="fixed" onIonRefresh={refresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large" class="ion-text-center">
@@ -60,12 +81,23 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <IonList>
-          {messages.map((m) => (
-            <OrderListItem key={m.id} message={m} />
-          ))}
+        <IonList className="ordersList" class="ordersList">
+          {ordersList.length ? (
+            ordersList.map((order, index) => (
+              <OrderListItem key={index} order={order} />
+            ))
+          ) : (
+            <LoaderSkeleton />
+          )}
         </IonList>
       </IonContent>
+      <Link to={{ pathname: "/add-order", state: { order: initialOrderItem } }}>
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton>
+            <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+        </IonFab>
+      </Link>
     </IonPage>
   );
 };

@@ -23,6 +23,7 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import Login from "./pages/login/Login";
+import { AddOrder } from "./pages/add-order/AddOrder";
 
 setupIonicReact();
 
@@ -33,18 +34,22 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
+          <switch>
           <Route path="/" render={() => (authUser ? <Home /> : <Login />)} />
           <Route path="/login" exact>
             <Login />
           </Route>
           <Route
-            path="/home"
-            exact={true}
-            render={() => (authUser ? <Home /> : <Login />)}
+              path="/add-order"
+              exact
+              render={() => authUser ? <AddOrder /> : <Login />}
           />
-          <Route path="/message/:id">
-            <ViewMessage />
+          <Route />
+          <Route path="/edit/:id" 
+            exact 
+            render={(props) => authUser ? <AddOrder /> : <Login />}>
           </Route>
+          </switch>
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

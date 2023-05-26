@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Message, getMessage } from '../data/messages';
+import { useState } from "react";
+import { IOrder } from "../data/messages";
 import {
   IonBackButton,
   IonButtons,
@@ -12,19 +12,19 @@ import {
   IonPage,
   IonToolbar,
   useIonViewWillEnter,
-} from '@ionic/react';
-import { personCircle } from 'ionicons/icons';
-import { useParams } from 'react-router';
-import './ViewMessage.css';
+} from "@ionic/react";
+import { personCircle } from "ionicons/icons";
+import { useParams } from "react-router";
+import "./ViewMessage.css";
 
 function ViewMessage() {
-  const [message, setMessage] = useState<Message>();
+  const [message, setMessage] = useState<IOrder>();
   const params = useParams<{ id: string }>();
 
-  useIonViewWillEnter(() => {
-    const msg = getMessage(parseInt(params.id, 10));
-    setMessage(msg);
-  });
+  // useIonViewWillEnter(() => {
+  //   const msg = getMessage(parseInt(params.id, 10));
+  //   setMessage(msg);
+  // });
 
   return (
     <IonPage id="view-message-page">
@@ -40,12 +40,16 @@ function ViewMessage() {
         {message ? (
           <>
             <IonItem>
-              <IonIcon aria-hidden="true" icon={personCircle} color="primary"></IonIcon>
+              <IonIcon
+                aria-hidden="true"
+                icon={personCircle}
+                color="primary"
+              ></IonIcon>
               <IonLabel className="ion-text-wrap">
                 <h2>
-                  {message.fromName}
+                  {/* {message.fromName} */}
                   <span className="date">
-                    <IonNote>{message.date}</IonNote>
+                    <IonNote>{message.orderDate}</IonNote>
                   </span>
                 </h2>
                 <h3>
@@ -55,7 +59,7 @@ function ViewMessage() {
             </IonItem>
 
             <div className="ion-padding">
-              <h1>{message.subject}</h1>
+              {/* <h1>{message.subject}</h1> */}
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut

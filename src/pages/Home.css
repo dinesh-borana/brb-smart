@@ -1,0 +1,25 @@
+/* .ordersHeader IonLabel {
+  margin-right: 10px;
+  overflow: scroll;
+  white-space: normal !important;
+} */
+
+.ordersHeader {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.ordersList {
+  overflow: scroll;
+  margin: 0 10px;
+}
+.title {
+  text-align: center;
+}
+
+ion-toolbar {
+  --background:orange;
+}
+ion-fab-button {
+  --background:orange;
+}

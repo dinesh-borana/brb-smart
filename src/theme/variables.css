@@ -42,6 +42,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-warning-contrast-rgb: 0, 0, 0;
   --ion-color-warning-shade: #e0ac08;
   --ion-color-warning-tint: #ffca22;
+  --ion-color-basic:orange;
 
   /** danger **/
   --ion-color-danger: #eb445a;
