@@ -13,19 +13,18 @@ import {
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import { useState } from "react";
-import { useIonRouter } from "@ionic/react";
 
 const Login: React.FC = () => {
-  const router = useIonRouter();
 
   const [errorMsg, setErrorMsg] = useState<string>("");
+  
   const login = (event: any) => {
     event.preventDefault();
     const { username, password } = document.forms[0];
     signInWithEmailAndPassword(auth, username.value, password.value)
       .then((result) => {
-        router.push("/home");
         localStorage.setItem("username", username.value);
+        window.location.assign('/home');
       })
       .catch((error) => {
         setErrorMsg("Incorrect Email or Password");

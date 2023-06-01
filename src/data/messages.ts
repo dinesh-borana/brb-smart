@@ -1,4 +1,5 @@
 export interface IOrder {
+  id:string;
   orderNumber: number;
   partyCode: number;
   orderDate: string;

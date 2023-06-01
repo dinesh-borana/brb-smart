@@ -23,3 +23,6 @@ ion-toolbar {
 ion-fab-button {
   --background:orange;
 }
+p {
+  text-align: center;
+}

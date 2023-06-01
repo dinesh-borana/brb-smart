@@ -1,25 +1,25 @@
+import { getAuth, signOut } from "firebase/auth";
+import { useEffect, useState } from "react";
 import OrderListItem from "../components/OrderListItem";
-import { useRef, useState } from "react";
 
 import {
+  IonButton,
+  IonButtons,
   IonContent,
   IonFab,
   IonFabButton,
   IonHeader,
   IonIcon,
-  IonItem,
-  IonLabel,
   IonList,
   IonPage,
   IonRefresher,
   IonRefresherContent,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter,
 } from "@ionic/react";
 import "./Home.css";
 import { db } from "../firebase.config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { add } from "ionicons/icons";
 import { LoaderSkeleton } from "./common/loaderSkeleton";
 import { Link } from "react-router-dom";
@@ -32,7 +32,7 @@ const initialOrderItem = {
       designNo: "",
       plating: "",
       quantity: "",
-    }
+    },
   ],
   partyCode: "",
   platingStatus: false,
@@ -46,15 +46,18 @@ const Home: React.FC = () => {
   const getOrdersList = () => {
     getDocs(collection(db, "orders")).then((results) => {
       results.forEach((result) => {
-        setOrdersList((ordersList) => [...ordersList, result.data()]);
+        const resultData = result.data();
+        resultData.id = result.id;
+        setOrdersList((ordersList) => [...ordersList, resultData]);
       });
     });
   };
 
-  useIonViewWillEnter(() => {
+  useEffect(() => {
+    console.log("hello");
     setOrdersList([]);
     getOrdersList();
-  });
+  },[]);
 
   const refresh = (e: CustomEvent) => {
     setTimeout(() => {
@@ -62,11 +65,39 @@ const Home: React.FC = () => {
     }, 3000);
   };
 
+  const deleteOrder = (orderId: string) => {
+    deleteDoc(doc(db, "orders", orderId))
+      .then((result) => {
+        console.log(result);
+        setOrdersList([]);
+        getOrdersList();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const logOut = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        localStorage.setItem("username", "");
+        window.location.assign('/');
+        console.log("Sign-out successful")
+      })
+      .catch((error) => {
+        console.log("An error happened")
+      });
+  };
+
   return (
     <IonPage id="home-page">
       <IonHeader>
         <IonToolbar>
           <IonTitle className="title">BRB Smart</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={logOut}>Logout</IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -84,9 +115,14 @@ const Home: React.FC = () => {
         <IonList className="ordersList" class="ordersList">
           {ordersList.length ? (
             ordersList.map((order, index) => (
-              <OrderListItem key={index} order={order} />
+              <OrderListItem
+                key={index}
+                order={order}
+                deleteOrder={deleteOrder}
+              />
             ))
-          ) : (
+          ) : ordersList.length === 0 ? (<p>No Order Aailable</p>)
+          : (
             <LoaderSkeleton />
           )}
         </IonList>

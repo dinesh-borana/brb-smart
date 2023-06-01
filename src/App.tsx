@@ -1,8 +1,7 @@
-import { Redirect, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
-import ViewMessage from "./pages/ViewMessage";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -29,13 +28,13 @@ setupIonicReact();
 
 const App: React.FC = () => {
   const authUser = localStorage.getItem("username") || "";
-  console.log(authUser);
   return (
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
           <switch>
-          <Route path="/" render={() => (authUser ? <Home /> : <Login />)} />
+          <Route path="/" exact render={() => (authUser ? <Home /> : <Login />)} />
+          <Route path="/home" exact render={() => (authUser ? <Home /> : <Login />)} />
           <Route path="/login" exact>
             <Login />
           </Route>

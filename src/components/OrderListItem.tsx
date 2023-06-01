@@ -11,9 +11,10 @@ import { Link } from "react-router-dom";
 
 interface MessageListItemProps {
   order: IOrder;
+  deleteOrder: (id:string) => void;
 }
 
-const OrderListItem: React.FC<MessageListItemProps> = ({ order }) => {
+const OrderListItem: React.FC<MessageListItemProps> = ({ order, deleteOrder }) => {
   const patingStatus = order.platingStatus ? "done" : "pending";
   const kacchaMaalStatus = order.kacchaMaalStatus ? "done" : "pending";
   return (
@@ -38,7 +39,7 @@ const OrderListItem: React.FC<MessageListItemProps> = ({ order }) => {
           Edit
         </IonButton>
       </Link>
-      <IonButton fill="solid" color="danger">
+      <IonButton fill="solid" color="danger" onClick={() => deleteOrder(order.id)}>
         Delete
       </IonButton>
     </IonCard>
