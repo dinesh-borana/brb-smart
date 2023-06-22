@@ -57,7 +57,7 @@ const Home: React.FC = () => {
     console.log("hello");
     setOrdersList([]);
     getOrdersList();
-  },[]);
+  }, []);
 
   const refresh = (e: CustomEvent) => {
     setTimeout(() => {
@@ -82,11 +82,11 @@ const Home: React.FC = () => {
     signOut(auth)
       .then(() => {
         localStorage.setItem("username", "");
-        window.location.assign('/');
-        console.log("Sign-out successful")
+        window.location.assign("/");
+        console.log("Sign-out successful");
       })
       .catch((error) => {
-        console.log("An error happened")
+        console.log("An error happened");
       });
   };
 
@@ -121,8 +121,9 @@ const Home: React.FC = () => {
                 deleteOrder={deleteOrder}
               />
             ))
-          ) : ordersList.length === 0 ? (<p>No Order Aailable</p>)
-          : (
+          ) : ordersList.length === 0 ? (
+            <p>No Order Aailable</p>
+          ) : (
             <LoaderSkeleton />
           )}
         </IonList>
