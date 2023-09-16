@@ -8,14 +8,9 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList,
   IonPage,
-  IonSelect,
-  IonSelectOption,
-  IonTextarea,
   IonTitle,
   IonToast,
-  IonToggle,
   IonToolbar,
 } from "@ionic/react";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
@@ -28,17 +23,20 @@ type TItem = {
   designNo: string;
   quantity: string;
   plating: string;
+  size: string;
+  notes: string;
 };
 
 const initiateItem: TItem = {
   designNo: "",
   quantity: "",
   plating: "",
+  size: "",
+  notes: "",
 };
 
 export const AddOrder = () => {
   const location = useLocation();
-  console.log(location);
   const { order } = location.state as any;
   const [items, setItems] = useState<TItem[]>(
     order.orderList.length > 0 ? order.orderList : [initiateItem]
@@ -54,19 +52,11 @@ export const AddOrder = () => {
     const {
       orderNumber,
       partyNumber,
-      platingStatus,
-      platingNotes,
-      kacchaMaalStatus,
-      kacchaMaalNotes,
       orderDate,
     } = formData;
     let reqData = {
       orderNumber: orderNumber.value,
       partyCode: partyNumber.value,
-      platingStatus: !!platingStatus.value,
-      platingNotes: platingNotes.value,
-      kacchaMaalNotes: kacchaMaalNotes.value,
-      kacchaMaalStatus: !!kacchaMaalStatus.value,
       orderDate: orderDate.value,
       orderList: items,
     };
@@ -78,10 +68,6 @@ export const AddOrder = () => {
           setShowMessage(true);
           orderNumber.value = "";
           partyNumber.value = "";
-          platingStatus.value = false;
-          platingNotes.value = "";
-          kacchaMaalNotes.value = "";
-          kacchaMaalStatus.value = false;
           orderDate.value = null;
           setItems([]);
         })
@@ -92,7 +78,7 @@ export const AddOrder = () => {
       const docRef = doc(db, "orders", order.id);
       setDoc(docRef, reqData)
         .then((docRef) => {
-          console.log("update DOne");
+          console.log("update Done");
         })
         .catch((error) => {
           console.log("error occured");
@@ -136,7 +122,7 @@ export const AddOrder = () => {
             ></IonInput>
           </IonItem>
           <IonItem>
-            <IonLabel>Party Number : </IonLabel>
+            <IonLabel>Party Name : </IonLabel>
             <IonInput
               type="text"
               name="partyNumber"
@@ -157,83 +143,89 @@ export const AddOrder = () => {
           {items.map((item, index) => {
             return (
               <>
-              <IonItem key={index}>
-                <IonInput
-                  type="text"
-                  placeholder="Design"
-                  class="ion-margin"
-                  name="designNo"
-                  value={item.designNo}
-                  onIonInput={(e) => {
-                    handleItemInputChange(
-                      e.target.name,
-                      e.target.value as string,
-                      index
-                    );
-                  }}
-                ></IonInput>
-                {/* <IonInput>
-                <IonList>
-                  <IonItem>
-                    <IonSelect
-                      aria-label="Fruit"
-                      interface="popover"
-                      placeholder="Size"
-                    >
-                      <IonSelectOption value="apples">2.4</IonSelectOption>
-                      <IonSelectOption value="oranges">2.6</IonSelectOption>
-                      <IonSelectOption value="bananas">2.8</IonSelectOption>
-                    </IonSelect>
-                  </IonItem>
-                </IonList>
-                </IonInput> */}
-                <IonInput
-                  type="text"
-                  name="quantity"
-                  placeholder="Quantity"
-                  value={item.quantity}
-                  onIonInput={(e) => {
-                    handleItemInputChange(
-                      e.target.name,
-                      e.target.value as string,
-                      index
-                    );
-                  }}
-                ></IonInput>
-                <IonInput
-                  type="text"
-                  name="plating"
-                  placeholder="Plating"
-                  value={item.plating}
-                  onIonInput={(e) => {
-                    handleItemInputChange(
-                      e.target.name,
-                      e.target.value as string,
-                      index
-                    );
-                  }}
-                ></IonInput>
-                {/* <IonInput>
-                <IonList>
-                  <IonItem>
-                    <IonSelect
-                      aria-label="Fruit"
-                      interface="popover"
-                      placeholder="Plating"
-                    >
-                      <IonSelectOption value="apples">Gold</IonSelectOption>
-                      <IonSelectOption value="oranges">Silver</IonSelectOption>
-                      <IonSelectOption value="bananas">Rhodium</IonSelectOption>
-                    </IonSelect>
-                  </IonItem>
-                </IonList>
-                </IonInput> */}
-              </IonItem>
-              {index === items.length - 1 && (
+                <IonItem key={index}>
+                  <IonInput
+                    type="text"
+                    placeholder="Design No"
+                    class="ion-margin"
+                    name="designNo"
+                    value={item.designNo}
+                    onIonInput={(e) => {
+                      handleItemInputChange(
+                        e.target.name,
+                        e.target.value as string,
+                        index
+                      );
+                    }}
+                  ></IonInput>
+                  <IonInput
+                    type="text"
+                    name="size"
+                    placeholder="Size"
+                    value={item.size}
+                    onIonInput={(e) => {
+                      handleItemInputChange(
+                        e.target.name,
+                        e.target.value as string,
+                        index
+                      );
+                    }}
+                  ></IonInput>
+                  <IonInput
+                    type="text"
+                    name="quantity"
+                    placeholder="Quantity"
+                    value={item.quantity}
+                    onIonInput={(e) => {
+                      handleItemInputChange(
+                        e.target.name,
+                        e.target.value as string,
+                        index
+                      );
+                    }}
+                  ></IonInput>
+                  <IonInput
+                    type="text"
+                    name="plating"
+                    placeholder="Plating"
+                    value={item.plating}
+                    onIonInput={(e) => {
+                      handleItemInputChange(
+                        e.target.name,
+                        e.target.value as string,
+                        index
+                      );
+                    }}
+                  ></IonInput>
+                  <IonInput
+                    type="text"
+                    name="notes"
+                    placeholder="Notes"
+                    value={item.notes}
+                    onIonInput={(e) => {
+                      handleItemInputChange(
+                        e.target.name,
+                        e.target.value as string,
+                        index
+                      );
+                    }}
+                  ></IonInput>
+                </IonItem>
+                {index === items.length - 1 && (
                   <IonButton
-                    style={{marginTop:'15px', marginBottom:'15px', marginLeft:'25%'}}
+                    style={{
+                      marginTop: "15px",
+                      marginBottom: "15px",
+                      marginLeft: "25%",
+                    }}
                     onClick={() =>
-                      addItemRow({ designNo: "", quantity: "", plating: "" })
+                      addItemRow({
+                        designNo: "",
+                        quantity: "",
+                        plating: "",
+                        size: "",
+                        notes: "",
+                      })
                     }
                   >
                     Add New item
@@ -243,34 +235,6 @@ export const AddOrder = () => {
               </>
             );
           })}
-          <IonItem>
-            <IonLabel>Plating Status</IonLabel>
-            <IonToggle name="platingStatus" checked={order.platingStatus}>
-              Plating Status
-            </IonToggle>
-          </IonItem>
-          <IonItem>
-            <IonLabel position="floating">Plating Notes: </IonLabel>
-            <IonTextarea
-              placeholder="Enter Plating Notes"
-              name="platingNotes"
-              value={order.platingNotes}
-            ></IonTextarea>
-          </IonItem>
-          <IonItem>
-            <IonLabel>Kaccha Maal Status</IonLabel>
-            <IonToggle name="kacchaMaalStatus" checked={order.kacchaMaalStatus}>
-              Kaccha Maal Status
-            </IonToggle>
-          </IonItem>
-          <IonItem>
-            <IonLabel position="floating">Kaccha Maal Notes</IonLabel>
-            <IonTextarea
-              placeholder="Enter Kaccha Maal Notes"
-              name="kacchaMaalNotes"
-              value={order.kacchaMaalNotes}
-            ></IonTextarea>
-          </IonItem>
           <IonButton className="ion-margin" expand="block" type="submit">
             {`${location.pathname === "/add-order" ? "Add" : "Update"} Order`}
           </IonButton>

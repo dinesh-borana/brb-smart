@@ -15,8 +15,6 @@ interface MessageListItemProps {
 }
 
 const OrderListItem: React.FC<MessageListItemProps> = ({ order, deleteOrder }) => {
-  const patingStatus = order.platingStatus ? "done" : "pending";
-  const kacchaMaalStatus = order.kacchaMaalStatus ? "done" : "pending";
   return (
     <IonCard>
       <IonCardHeader>
@@ -25,13 +23,6 @@ const OrderListItem: React.FC<MessageListItemProps> = ({ order, deleteOrder }) =
           Order Date : <strong>{order.orderDate}</strong>
         </IonCardSubtitle>
         <IonCardSubtitle>Party Number : {order.partyCode}</IonCardSubtitle>
-        <IonCardSubtitle className={patingStatus}>
-          Plating Status : {`${order.platingStatus ? "Done" : "Pending"}`}
-        </IonCardSubtitle>
-        <IonCardSubtitle className={kacchaMaalStatus}>
-          Kaccha Maal Status :{" "}
-          {`${order.kacchaMaalStatus ? "Done" : "Pending"}`}
-        </IonCardSubtitle>
       </IonCardHeader>
 
       <Link to={{ pathname: `/edit/${order.orderNumber}`, state: { order } }}>

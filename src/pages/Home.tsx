@@ -26,7 +26,6 @@ import { Link } from "react-router-dom";
 
 const initialOrderItem = {
   orderNumber: "",
-  kacchaMaalNotes: "",
   orderList: [
     {
       designNo: "",
@@ -35,26 +34,27 @@ const initialOrderItem = {
     },
   ],
   partyCode: "",
-  platingStatus: false,
-  platingNotes: "",
   orderDate: "",
-  kacchaMaalStatus: false,
 };
 
 const Home: React.FC = () => {
   const [ordersList, setOrdersList] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const getOrdersList = () => {
+    setLoading(true);
     getDocs(collection(db, "orders")).then((results) => {
+      setLoading(false);
       results.forEach((result) => {
         const resultData = result.data();
         resultData.id = result.id;
         setOrdersList((ordersList) => [...ordersList, resultData]);
       });
+    }).catch((error) => {
+      setLoading(false);
     });
   };
 
   useEffect(() => {
-    console.log("hello");
     setOrdersList([]);
     getOrdersList();
   }, []);
@@ -121,7 +121,7 @@ const Home: React.FC = () => {
                 deleteOrder={deleteOrder}
               />
             ))
-          ) : ordersList.length === 0 ? (
+          ) : !loading ? (
             <p>No Order Aailable</p>
           ) : (
             <LoaderSkeleton />
