@@ -8,6 +8,7 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  IonList,
   IonPage,
   IonTitle,
   IonToast,
@@ -103,7 +104,7 @@ export const AddOrder = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="home"></IonBackButton>
             </IonButtons>
-            <IonTitle class="ion-text-center">{`${
+            <IonTitle className="ion-text-center">{`${
               location.pathname === "/add-order" ? "Add" : "Update"
             } Order Details`}</IonTitle>
           </IonToolbar>
@@ -140,14 +141,15 @@ export const AddOrder = () => {
           <IonItem>
             <IonLabel>Order Details : </IonLabel>
           </IonItem>
+          <IonList inset={true}>
           {items.map((item, index) => {
             return (
               <>
                 <IonItem key={index}>
                   <IonInput
                     type="text"
-                    placeholder="Design No"
-                    class="ion-margin"
+                    placeholder="Design"
+                    className="ion-margin"
                     name="designNo"
                     value={item.designNo}
                     onIonInput={(e) => {
@@ -174,7 +176,7 @@ export const AddOrder = () => {
                   <IonInput
                     type="text"
                     name="quantity"
-                    placeholder="Quantity"
+                    placeholder="Qty"
                     value={item.quantity}
                     onIonInput={(e) => {
                       handleItemInputChange(
@@ -235,6 +237,7 @@ export const AddOrder = () => {
               </>
             );
           })}
+          </IonList>
           <IonButton className="ion-margin" expand="block" type="submit">
             {`${location.pathname === "/add-order" ? "Add" : "Update"} Order`}
           </IonButton>
